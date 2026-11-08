@@ -1,0 +1,10 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZCUSTADDR20"
+    ],
+    "ASSOCIATED": [
+      "ZI_CUSTOMER20"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "BASEINFO": {
+    "FROM": [
+      "ZI_CUSTOMER20"
+    ],
+    "ASSOCIATED": [
+      "ZC_CUSTADDR20",
+      "ZI_CUSTADDR20"
+    ],
+    "BASE": [
+      "ZI_CUSTOMER20"
+    ]
+  }
+}
