@@ -1,32 +1,43 @@
-CLASS lhc_ZI_CUSTOMER20 DEFINITION INHERITING FROM cl_abap_behavior_handler.
+CLASS lhc_Customer DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 
     METHODS create FOR MODIFY
-      IMPORTING entities FOR CREATE zi_customer20.
+      IMPORTING entities FOR CREATE Customer.
 
     METHODS update FOR MODIFY
-      IMPORTING entities FOR UPDATE zi_customer20.
+      IMPORTING entities FOR UPDATE Customer.
 
     METHODS delete FOR MODIFY
-      IMPORTING keys FOR DELETE zi_customer20.
+      IMPORTING keys FOR DELETE Customer.
 
     METHODS read FOR READ
-      IMPORTING keys FOR READ zi_customer20 RESULT result.
+      IMPORTING keys FOR READ Customer RESULT result.
 
     METHODS lock FOR LOCK
-      IMPORTING keys FOR LOCK zi_customer20.
+      IMPORTING keys FOR LOCK Customer.
 
     METHODS rba_Custaddr FOR READ
-      IMPORTING keys_rba FOR READ zi_customer20\_Custaddr FULL result_requested RESULT result LINK association_links.
+      IMPORTING keys_rba FOR READ Customer\_Custaddr FULL result_requested RESULT result LINK association_links.
 
     METHODS cba_Custaddr FOR MODIFY
-      IMPORTING entities_cba FOR CREATE zi_customer20\_Custaddr.
+      IMPORTING entities_cba FOR CREATE Customer\_Custaddr.
 
 ENDCLASS.
 
-CLASS lhc_ZI_CUSTOMER20 IMPLEMENTATION.
+CLASS lhc_Customer IMPLEMENTATION.
 
   METHOD create.
+    DATA: ls_customer TYPE zscustomer.
+
+    LOOP AT entities ASSIGNING FIELD-SYMBOL(<entity>).
+      MOVE-CORRESPONDING <entity> TO  ls_customer.
+
+      DATA(customerno) = zcl_customer=>get_instance( )->cust_create( is_customer = ls_customer ).
+
+      APPEND VALUE #( %cid = <entity>-%cid customerno = customerno ) TO mapped-customer.
+    ENDLOOP.
+
+
   ENDMETHOD.
 
   METHOD update.
@@ -49,24 +60,24 @@ CLASS lhc_ZI_CUSTOMER20 IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS lhc_ZI_CUSTADDR20 DEFINITION INHERITING FROM cl_abap_behavior_handler.
+CLASS lhc_CustAddr DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 
     METHODS update FOR MODIFY
-      IMPORTING entities FOR UPDATE zi_custaddr20.
+      IMPORTING entities FOR UPDATE CustAddr.
 
     METHODS delete FOR MODIFY
-      IMPORTING keys FOR DELETE zi_custaddr20.
+      IMPORTING keys FOR DELETE CustAddr.
 
     METHODS read FOR READ
-      IMPORTING keys FOR READ zi_custaddr20 RESULT result.
+      IMPORTING keys FOR READ CustAddr RESULT result.
 
     METHODS rba_Customer FOR READ
-      IMPORTING keys_rba FOR READ zi_custaddr20\_Customer FULL result_requested RESULT result LINK association_links.
+      IMPORTING keys_rba FOR READ CustAddr\_Customer FULL result_requested RESULT result LINK association_links.
 
 ENDCLASS.
 
-CLASS lhc_ZI_CUSTADDR20 IMPLEMENTATION.
+CLASS lhc_CustAddr IMPLEMENTATION.
 
   METHOD update.
   ENDMETHOD.
@@ -106,6 +117,7 @@ CLASS lsc_ZI_CUSTOMER20 IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD save.
+    zcl_customer=>get_instance( )->save( ).
   ENDMETHOD.
 
   METHOD cleanup.
